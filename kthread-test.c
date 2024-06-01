@@ -16,9 +16,8 @@ struct test_data {
 static int thread_func(void *data)
 {
 	struct test_data *td = (struct test_data *)data;
-	struct task_struct *cur = current;
 
-	pr_info("%d your data is %d\n", cur->pid, td->a);
+	pr_info("%d(%s) your data is %d\n", current->pid, current->comm, td->a);
 
 	mutex_lock(&td->mlock);
 	td->a++;
@@ -30,9 +29,8 @@ static int thread_func(void *data)
 static int thread_func1(void *data)
 {
 	struct test_data *td = (struct test_data *)data;
-	struct task_struct *cur = current;
 
-	pr_info("%d your data is %d\n", cur->pid, td->a);
+	pr_info("%d(%s) your data is %d\n", current->pid, current->comm, td->a);
 
 	mutex_lock(&td->mlock);
 	td->a++;
@@ -53,14 +51,12 @@ static int kthread_test(void)
 	if (!IS_ERR(kt1))
 		wake_up_process(kt1);
 
-	kt2 = kthread_create(thread_func1, (void *)&td, "test-thread%d", 1);
-	if (!IS_ERR(kt2))
-		wake_up_process(kt2);
+	kt2 = kthread_run(thread_func1, (void *)&td, "test-thread%d", 1);
+	if (!kt2) {
+		pr_err("kthread_run create thread failed\n");
+	}
 
 	msleep(100);
-
-	// kthread_run(thread_func1, (void *)&td, "test-thread%d", 1);
-
 	mutex_destroy(&td.mlock);
 
 	return 0;
