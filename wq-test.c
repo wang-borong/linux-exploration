@@ -1,5 +1,7 @@
 /*
  * Copyright © 2024 Jason Wang. All Rights Reserved.
+ *
+ * This module is an example to workqueue.
  */
 
 #include <linux/module.h>
