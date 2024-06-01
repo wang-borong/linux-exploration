@@ -25,9 +25,11 @@
 
 ## bitmap
 
+使用例子参见 bmtest.c。
 
 ## list
 
+使用例子参见 list-test.c。
 
 ## kthread
 
