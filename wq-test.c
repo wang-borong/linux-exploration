@@ -24,6 +24,8 @@ static void work_func(struct work_struct *w)
 	schedule_timeout(2 * HZ); //Wait 2 seconds
 
 	printk(KERN_INFO "[Deferred work]=> DONE. BTW the data is: %d\n", c_ptr->arg);
+
+	kfree(c_ptr);
 }
 
 
